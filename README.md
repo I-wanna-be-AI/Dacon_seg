@@ -14,6 +14,12 @@
 - train_img: TRAIN_0000.png ~ TRAIN_7139.png
 - test_img: TEST_00000.png ~ TEST_60639.png
 
+- to make dataset symboli link 
+```
+ln -s ~/shared/hdd_ext/nvme1/Dacon/open data
+```
+
+
 ### Models
 
 - 나중에 추가
