@@ -5,7 +5,6 @@ from dataset import *
 from train import *
 from infer import *
 
-
 warnings.filterwarnings("ignore")
 
 if __name__ == "__main__":
