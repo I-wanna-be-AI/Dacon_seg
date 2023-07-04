@@ -9,28 +9,7 @@ from sklearn.model_selection import train_test_split
 from .augmen import *
 from .rle import *
 
-class customDataset(Dataset):
-    def __init__(self, X, transform,  y = None):
-        self.X = X
-        self.y = y
-        self.transform = transform
 
-    def __getitem__(self, index):
-        impath = self.X[index]
-        # cv2_img = cv2.imread(impath, cv2.IMREAD_COLOR)
-        cv2_img = Image.open(impath).convert('RGB')
-        # img = Image.open(impath).convert('RGB')
-        img = self.transform(cv2_img)
-
-        if self.y is not None:
-            target = self.y[index]
-            return img, target
-        else:
-            fname = os.path.basename(impath)
-            return img, fname
-
-    def __len__(self, ):
-        return len(self.X)
 
 
 class SatelliteDataset(Dataset):

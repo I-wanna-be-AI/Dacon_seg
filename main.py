@@ -1,11 +1,17 @@
 import warnings
+
+from torch import device
+from tqdm import tqdm
+
 from utils import *
 from models import *
 from dataset import *
 from train import *
-from infer import *
+
 
 warnings.filterwarnings("ignore")
+
+
 
 if __name__ == "__main__":
     args = get_argparser()
@@ -14,12 +20,43 @@ if __name__ == "__main__":
     
     modeled = get_model(args)
     optimizer, criterion = get_optimizer(args, modeled)
+    transforms = get_aug(args)
 
     if args.train:
-        train_dl, valid_dl, train_sampler = get_dataloader(args)
-        scheduler = get_scheduler(args, optimizer, train_dl)
-        do_train(args, modeled, optimizer, criterion, train_dl, valid_dl, train_sampler, scheduler)
+        train_size = int(0.8 * len(dataset))
+        val_size = len(dataset) - train_size
+        train_dataset, val_dataset = torch.utils.data.random_split(dataset, [train_size, val_size])
+
+        train_loader = DataLoader(train_dataset, batch_size=16, shuffle=True, num_workers=4)
+        val_loader = DataLoader(val_dataset, batch_size=16, shuffle=False, num_workers=4)
+        #train_dl, valid_dl, train_sampler = get_dataloader(args)
+        scheduler = get_scheduler(args, optimizer, train_loader)
+        do_train(args, modeled, optimizer, criterion, train_loader, val_loader, scheduler)
     
     if args.infer:
-        test_dl, test_df = get_testloader(args)
-        inference(args, modeled, test_dl, test_df)
+        #test_dl, test_df = get_testloader(args)
+        test_dataset = SatelliteDataset(csv_file='./test.csv', transform=transforms, infer=True)
+        test_loader = DataLoader(test_dataset, batch_size=16, shuffle=False, num_workers=4)
+        model = modeled
+        with torch.no_grad():
+            model.eval()
+            result = []
+            for images in tqdm(test_loader):
+                images = images.float().to(device)
+
+                outputs = model(images)
+                masks = torch.sigmoid(outputs).cpu().numpy()
+                masks = np.squeeze(masks, axis=1)
+                masks = (masks > 0.35).astype(np.uint8)  # Threshold = 0.35
+
+                for i in range(len(images)):
+                    mask_rle = rle_encode(masks[i])
+                    if mask_rle == '':  # 예측된 건물 픽셀이 아예 없는 경우 -1
+                        result.append(-1)
+                    else:
+                        result.append(mask_rle)
+
+        submit = pd.read_csv('./sample_submission.csv')
+        submit['mask_rle'] = result
+        submit.to_csv('./submit.csv', index=False)
+

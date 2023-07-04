@@ -3,7 +3,7 @@ import time
 from utils import *
 import wandb
 
-def do_train(args, model, optimizer, criterion, train_dl, valid_dl, train_sampler, scheduler):
+def do_train(args, model, optimizer, criterion, train_dl, valid_dl, scheduler):
 
     print()
     if args.is_master:
@@ -13,7 +13,6 @@ def do_train(args, model, optimizer, criterion, train_dl, valid_dl, train_sample
     best_loss = 1e10
     scaler = torch.cuda.amp.GradScaler(enabled = True)
     for epoch in range(args.epochs):
-        train_sampler.set_epoch(epoch)
 
         if args.is_master:
             print(f"Epoch :  {epoch + 1}")
