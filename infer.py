@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 
 def inference(args, model, test_dl, submit_df):
-    model.load_state_dict(torch.load("chkpt/convenxtconvnext224_model_768.pt", map_location = args.device)) 
+    model.load_state_dict(torch.load("chkpt/unet_baseunet_base_model_768.pt", map_location = args.device))
     
     if args.is_master:
         print("model Evaluate")
@@ -30,7 +30,7 @@ def inference(args, model, test_dl, submit_df):
         result = submit_df.merge(pred_df, on='ImageId', how='left')
         result.drop('answer_x', axis=1, inplace=True)
         result.rename(columns={'answer_y':'answer'}, inplace=True)
-        result.to_csv(os.path.join(args.submit_path,'convnext_base224.csv'), index=False)
+        result.to_csv(os.path.join(args.submit_path,'unet_baseunet_base_model_768.csv'), index=False)
         # submit_df.to_csv(os.path.join(args.submit_path,'effb0_224.csv'), index=False)
         print("success")
     
