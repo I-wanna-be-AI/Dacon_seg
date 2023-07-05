@@ -1,5 +1,5 @@
 # Train
-torchrun --nproc_per_node=2 main.py --gpu_ids 6,7 --train 1 --img_size 224 --model efficientnet_b1 --batchsize 128 --save_name eff_b1_img224
+torchrun --nproc_per_node=2 main.py --gpu_ids 0,1 --train 1 --img_size 224 --model unet_base --batchsize 128 --save_name unet_base
 torchrun --nproc_per_node=2 main.py --gpu_ids 8,9 --train 1 --img_size 768 --model efficientnet_b0 --batchsize 200 --save_name eff_b0_img768
 torchrun --nproc_per_node=2 --master_port=12347 main.py --gpu_ids 8,9 --train 1 --img_size 224 --model convenxt --batchsize 200 --save_name convnext224
 

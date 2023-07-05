@@ -20,9 +20,11 @@ if __name__ == "__main__":
     
     modeled = get_model(args)
     optimizer, criterion = get_optimizer(args, modeled)
-    transforms = get_aug(args)
 
     if args.train:
+
+        train_transform , valid_transform = get_aug(args)
+        dataset = SatelliteDataset(csv_file='./data/train.csv', transform=train_transform)
         train_size = int(0.8 * len(dataset))
         val_size = len(dataset) - train_size
         train_dataset, val_dataset = torch.utils.data.random_split(dataset, [train_size, val_size])
@@ -32,10 +34,12 @@ if __name__ == "__main__":
         #train_dl, valid_dl, train_sampler = get_dataloader(args)
         scheduler = get_scheduler(args, optimizer, train_loader)
         do_train(args, modeled, optimizer, criterion, train_loader, val_loader, scheduler)
-    
+
+
     if args.infer:
         #test_dl, test_df = get_testloader(args)
-        test_dataset = SatelliteDataset(csv_file='./test.csv', transform=transforms, infer=True)
+        _,transform = get_aug(args)
+        test_dataset = SatelliteDataset(csv_file='./test.csv', transform=transform, infer=True)
         test_loader = DataLoader(test_dataset, batch_size=16, shuffle=False, num_workers=4)
         model = modeled
         with torch.no_grad():

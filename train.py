@@ -7,7 +7,7 @@ def do_train(args, model, optimizer, criterion, train_dl, valid_dl, scheduler):
 
     print()
     if args.is_master:
-        wandb.init(name = f"{args.model}", project = "AI or Not Competition", reinit = True, entity = "psboys", config = args)
+        wandb.init(name = f"{args.model}", project = "Dacon_Segmentation", reinit = True, entity = "dk58319", config = args)
         print("Stat Train and Valid")
 
     best_loss = 1e10
@@ -23,7 +23,7 @@ def do_train(args, model, optimizer, criterion, train_dl, valid_dl, scheduler):
             optimizer.zero_grad()
             with torch.cuda.amp.autocast(enabled = True):    
                 pred = model(img)
-                loss = criterion(pred.squeeze(-1), label)
+                loss = criterion(pred, label.unsqueeze(1))
 
             scaler.scale(loss).backward()
             scaler.step(optimizer)
@@ -44,7 +44,7 @@ def do_train(args, model, optimizer, criterion, train_dl, valid_dl, scheduler):
                 preds += model_pred.tolist()
                 true_label += label.tolist()
             
-            loss = criterion(pred_v2.squeeze(-1), label)
+            loss = criterion(pred_v2.squeeze(-1), label.unsqueeze(1))
             test_loss += loss
         
         preds = np.where(np.array(preds) > threshold, 1, 0)

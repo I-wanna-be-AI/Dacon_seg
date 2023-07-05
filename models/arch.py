@@ -1,29 +1,74 @@
 import torch
 import timm
+from torch import device
 
 from torchvision import models
 import torch.nn as nn
 from torch.nn.parallel import DistributedDataParallel
 
+
+def double_conv(in_channels, out_channels):
+    return nn.Sequential(
+        nn.Conv2d(in_channels, out_channels, 3, padding=1),
+        nn.ReLU(inplace=True),
+        nn.Conv2d(out_channels, out_channels, 3, padding=1),
+        nn.ReLU(inplace=True)
+    )
+
+
+# 간단한 U-Net 모델 정의
+class UNet(nn.Module):
+    def __init__(self):
+        super(UNet, self).__init__()
+        self.dconv_down1 = double_conv(3, 64)
+        self.dconv_down2 = double_conv(64, 128)
+        self.dconv_down3 = double_conv(128, 256)
+        self.dconv_down4 = double_conv(256, 512)
+
+        self.maxpool = nn.MaxPool2d(2)
+        self.upsample = nn.Upsample(scale_factor=2, mode='bilinear', align_corners=True)
+
+        self.dconv_up3 = double_conv(256 + 512, 256)
+        self.dconv_up2 = double_conv(128 + 256, 128)
+        self.dconv_up1 = double_conv(128 + 64, 64)
+
+        self.conv_last = nn.Conv2d(64, 1, 1)
+
+    def forward(self, x):
+        conv1 = self.dconv_down1(x)
+        x = self.maxpool(conv1)
+
+        conv2 = self.dconv_down2(x)
+        x = self.maxpool(conv2)
+
+        conv3 = self.dconv_down3(x)
+        x = self.maxpool(conv3)
+
+        x = self.dconv_down4(x)
+
+        x = self.upsample(x)
+        x = torch.cat([x, conv3], dim=1)
+
+        x = self.dconv_up3(x)
+        x = self.upsample(x)
+        x = torch.cat([x, conv2], dim=1)
+
+        x = self.dconv_up2(x)
+        x = self.upsample(x)
+        x = torch.cat([x, conv1], dim=1)
+
+        x = self.dconv_up1(x)
+
+        out = self.conv_last(x)
+
+        return out
+
 def get_model(args):
     if args.model == "efficientnet_b0":
         model = timm.create_model('efficientnet_b0', pretrained=True, num_classes = 1)
-    elif args.model == "efficientnet_b1":
-        model = timm.create_model('efficientnet_b1', pretrained=True, num_classes = 1)
-    elif args.model == "efficientnet_b2":
-        model = timm.create_model('efficientnet_b2', pretrained=True, num_classes = 1)
-    elif args.model == "efficientnet_b3":
-        model = timm.create_model('efficientnet_b3', pretrained=True, num_classes = 1)
-    elif args.model == "efficientnet_b4":
-        model = timm.create_model('efficientnet_b4', pretrained=True, num_classes = 1)
-    elif args.model == "efficientnet_b5":
-        model = timm.create_model('efficientnet_b5', pretrained=True, num_classes = 1)
-    elif args.model == "efficientnet_b6":
-        model = timm.create_model('efficientnet_b6', pretrained=True, num_classes = 1)
-    elif args.model == "convenxt":
-        model = timm.create_model('convnext_base', pretrained=True, num_classes = 1)
-    elif args.model == "efficientnetv2":
-        model = timm.create_model('tf_efficientnetv2_s_in21ft1k', pretrained=True, num_classes = 1)
+
+    elif args.model == "unet_base":
+        model=UNet()
     
     model = torch.nn.SyncBatchNorm.convert_sync_batchnorm(model)
     model.cuda(args.local_rank)
