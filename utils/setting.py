@@ -35,6 +35,5 @@ def save_model(args, model):
 
 def get_metric(y_true, y_pred):
     acc = accuracy_score(y_true, y_pred)
-    f1_metric = f1_score(y_true, y_pred, average='macro')
 
-    return acc, f1_metric
+    return acc
