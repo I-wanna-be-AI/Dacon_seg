@@ -1,60 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="Always" serverName="dhdock" remoteFilesAllowedToDisappearOnAutoupload="false">
+  <component name="PublishConfigData" autoUpload="Always" serverName="docker" remoteFilesAllowedToDisappearOnAutoupload="false" confirmBeforeUploading="false">
+    <option name="confirmBeforeUploading" value="false" />
     <serverData>
-      <paths name="dhdock1">
+      <paths name="docker_1">
         <serverdata>
           <mappings>
-            <mapping deploy="/private/Dacon_seg" local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/home/junseo/private/Dacon_seg" local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>
-      <paths name="dhdock1-interpreter">
+      <paths name="docker_1_interpreter">
         <serverdata>
           <mappings>
-            <mapping deploy="/private/Dacon_seg" local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/home/junseo/private/Dacon_seg" local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>
-      <paths name="dhdock2">
+      <paths name="docker_2">
         <serverdata>
           <mappings>
-            <mapping deploy="/private/Dacon_seg" local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/home/junseo/private/Dacon_seg" local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>
-      <paths name="dhdock2-interpreter">
+      <paths name="docker_2_interpreter">
         <serverdata>
           <mappings>
-            <mapping deploy="/private/Dacon_seg" local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/home/junseo/private/Dacon_seg" local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>
-      <paths name="dhdock3">
+      <paths name="docker_4">
         <serverdata>
           <mappings>
-            <mapping deploy="/private/Dacon_seg" local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/home/junseo/private/Dacon_seg" local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>
-      <paths name="dhdock3-interpreter">
+      <paths name="docker_4_interpreter">
         <serverdata>
           <mappings>
-            <mapping deploy="/private/Dacon_seg" local="$PROJECT_DIR$" web="/" />
-          </mappings>
-        </serverdata>
-      </paths>
-      <paths name="dhdock4">
-        <serverdata>
-          <mappings>
-            <mapping deploy="/private/Dacon_seg" local="$PROJECT_DIR$" web="/" />
-          </mappings>
-        </serverdata>
-      </paths>
-      <paths name="dhdock4-interpreter">
-        <serverdata>
-          <mappings>
-            <mapping deploy="/private/Dacon_seg" local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/home/junseo/private/Dacon_seg" local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>
