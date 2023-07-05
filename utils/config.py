@@ -15,7 +15,7 @@ def get_argparser():
     parser.add_argument("--model", type = str, required = False)
     parser.add_argument("--batchsize", type = int, default= 256, required = False)
     parser.add_argument("--epochs", type = int, default= 60, required = False)
-    parser.add_argument("--lr", type = float, default= 5e-4, required = False)
+    parser.add_argument("--lr", type = float, default= 1e-5, required = False)
     parser.add_argument("--one_cycle_max_lr", type = float, default= 1e-5, required = False)
     parser.add_argument("--one_cycle_pct_start", type = float, default= 0.1, required = False)
     

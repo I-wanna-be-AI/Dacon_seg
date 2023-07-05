@@ -39,9 +39,9 @@ def do_train(args, model, optimizer, criterion, train_dl, valid_dl, scheduler):
         true_label = []
         preds = []
         test_loss, threshold = 0, 0.5
-
+        print(f"Validation step, epoch: {epoch + 1}")
         model.eval()
-        print(f"Validation step, epoch: {epoch+1}")
+
         for img, mask in valid_dl:         # # valid code
             img, mask = img.to(args.device, dtype=torch.float), mask.to(args.device, dtype=torch.float)
             with torch.no_grad():

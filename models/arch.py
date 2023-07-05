@@ -1,6 +1,6 @@
 import torch
 import timm
-
+import segmentation_models_pytorch as smp
 
 from torch.nn.parallel import DistributedDataParallel
 
@@ -13,6 +13,9 @@ def get_model(args):
 
     elif args.model == "unet_base":
         model=UNet()
+
+    elif args.model == "unet_resnext101":
+        model = smp.Unet(encoder_name="resnext101_32x8d", encoder_weights="imagenet", in_channels=3,   classes=1)
     
     model = torch.nn.SyncBatchNorm.convert_sync_batchnorm(model)
     model.cuda(args.local_rank)
