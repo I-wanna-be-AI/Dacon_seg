@@ -21,7 +21,7 @@ def do_train(args, model, optimizer, criterion, train_dl, valid_dl, scheduler):
             print(f"Epoch :  {epoch + 1}")
 
         model.train()
-        for img, mask in tqdm(train_dl):
+        for img, mask in train_dl:
             img, mask = img.to(args.device, dtype=torch.float), mask.to(args.device, dtype=torch.float)
             optimizer.zero_grad()
             epoch_loss =0
@@ -41,7 +41,8 @@ def do_train(args, model, optimizer, criterion, train_dl, valid_dl, scheduler):
         test_loss, threshold = 0, 0.5
 
         model.eval()
-        for img, mask in tqdm(valid_dl):         # # valid code
+        print(f"Validation step, epoch: {epoch+1}")
+        for img, mask in valid_dl:         # # valid code
             img, mask = img.to(args.device, dtype=torch.float), mask.to(args.device, dtype=torch.float)
             with torch.no_grad():
                 # pred_v2 = model(img)
@@ -55,7 +56,7 @@ def do_train(args, model, optimizer, criterion, train_dl, valid_dl, scheduler):
             
             loss = criterion(outputs, mask.unsqueeze(1))
             test_loss += loss
-
+            test_loss = test_loss/len(valid_dl)
 
         if args.is_master:
             print(f" Loss : {test_loss}")
