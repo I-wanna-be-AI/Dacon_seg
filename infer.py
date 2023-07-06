@@ -2,36 +2,36 @@ import os
 import torch
 import numpy as np
 import pandas as pd
+from tqdm import tqdm
 
-def inference(args, model, test_dl, submit_df):
-    model.load_state_dict(torch.load("chkpt/unet_baseunet_base_model_768.pt", map_location = args.device))
-    
+from dataset import rle_encode
+
+
+def inference(args, model, test_dataloader):
+    model.load_state_dict(torch.load("./chkpt/effnet3_model_768.pt", map_location=args.device))
+
     if args.is_master:
         print("model Evaluate")
-    
-    preds = []
-    filenames = []
-    threshold = 0.5
-    model.eval()
-    for img, fname in test_dl:        
-        img = img.to(args.device)
-        
-        with torch.no_grad():
-            pred_v2 = model(img)
-            model_pred = pred_v2.squeeze(1).to('cpu')
-            preds += model_pred.tolist()
-        filenames.extend(fname)
-            
-    preds = np.where(np.array(preds) > threshold, 1, 0)
 
-    if args.is_master:
-        # Save predictions according to the sample submission format
-        pred_df = pd.DataFrame({'ImageId':filenames, 'answer': preds})
-        result = submit_df.merge(pred_df, on='ImageId', how='left')
-        result.drop('answer_x', axis=1, inplace=True)
-        result.rename(columns={'answer_y':'answer'}, inplace=True)
-        result.to_csv(os.path.join(args.submit_path,'unet_baseunet_base_model_768.csv'), index=False)
-        # submit_df.to_csv(os.path.join(args.submit_path,'effb0_224.csv'), index=False)
-        print("success")
-    
-    
+    with torch.no_grad():
+        model.eval()
+        result = []
+        for images in tqdm(test_dataloader):
+            images = images.float().to(args.device)
+
+            outputs = model(images)
+            masks = torch.sigmoid(outputs).cpu().numpy()
+            masks = np.squeeze(masks, axis=1)
+            masks = (masks > 0.35).astype(np.uint8)  # Threshold = 0.35
+
+            for i in range(len(images)):
+                mask_rle = rle_encode(masks[i])
+                if mask_rle == '':  # 예측된 건물 픽셀이 아예 없는 경우 -1
+                    result.append(-1)
+                else:
+                    result.append(mask_rle)
+
+    submit = pd.read_csv('./data/sample_submission.csv')
+    submit['mask_rle'] = result
+    submit.to_csv('./submit.csv', index=False)
+    print("success")

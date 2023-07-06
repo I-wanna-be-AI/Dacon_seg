@@ -7,7 +7,7 @@ from utils import *
 from models import *
 from dataset import *
 from train import *
-
+from infer import *
 
 warnings.filterwarnings("ignore")
 
@@ -42,27 +42,5 @@ if __name__ == "__main__":
         _,transform = get_aug(args)
         test_dataset = SatelliteDataset(csv_file='./data/test.csv', transform=transform, infer=True)
         test_loader = DataLoader(test_dataset, batch_size=16, shuffle=False, num_workers=4)
-        model = modeled
-        model.load_state_dict(torch.load("chkpt/unet_baseunet_base_model_768.pt", map_location=args.device))
-        with torch.no_grad():
-            model.eval()
-            result = []
-            for images in tqdm(test_loader):
-                images = images.float().to(args.device)
-
-                outputs = model(images)
-                masks = torch.sigmoid(outputs).cpu().numpy()
-                masks = np.squeeze(masks, axis=1)
-                masks = (masks > 0.35).astype(np.uint8)  # Threshold = 0.35
-
-                for i in range(len(images)):
-                    mask_rle = rle_encode(masks[i])
-                    if mask_rle == '':  # 예측된 건물 픽셀이 아예 없는 경우 -1
-                        result.append(-1)
-                    else:
-                        result.append(mask_rle)
-
-        submit = pd.read_csv('./data/sample_submission.csv')
-        submit['mask_rle'] = result
-        submit.to_csv('./submit/submit.csv', index=False)
+        inference(args, modeled, test_loader)
 
