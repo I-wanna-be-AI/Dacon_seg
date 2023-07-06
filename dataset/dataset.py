@@ -7,9 +7,7 @@ import torch
 from torch.utils.data import DataLoader, Dataset
 from sklearn.model_selection import train_test_split
 from .augmen import *
-from .rle import *
-
-
+from .rle import rle_decode
 
 
 class SatelliteDataset(Dataset):

@@ -29,8 +29,8 @@ if __name__ == "__main__":
         val_size = len(dataset) - train_size
         train_dataset, val_dataset = torch.utils.data.random_split(dataset, [train_size, val_size])
 
-        train_loader = DataLoader(train_dataset, batch_size=16, shuffle=True, num_workers=4)
-        val_loader = DataLoader(val_dataset, batch_size=16, shuffle=False, num_workers=4)
+        train_loader = DataLoader(train_dataset, batch_size=args.batchsize, shuffle=True, num_workers=4)
+        val_loader = DataLoader(val_dataset, batch_size=args.batchsize, shuffle=False, num_workers=4)
         #train_dl, valid_dl, train_sampler = get_dataloader(args)
         scheduler = get_scheduler(args, optimizer, train_loader)
         do_train(args, modeled, optimizer, criterion, train_loader, val_loader, scheduler)
@@ -40,6 +40,6 @@ if __name__ == "__main__":
         #test_dl, test_df = get_testloader(args)
         _,transform = get_aug(args)
         test_dataset = SatelliteDataset(csv_file='./data/test.csv', transform=transform, infer=True)
-        test_loader = DataLoader(test_dataset, batch_size=16, shuffle=False, num_workers=4)
+        test_loader = DataLoader(test_dataset, batch_size=args.batchsize, shuffle=False, num_workers=4)
         inference(args, modeled, test_loader)
 
