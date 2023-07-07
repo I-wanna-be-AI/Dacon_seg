@@ -56,8 +56,8 @@ def do_train(args, model, optimizer, criterion, train_dl, valid_dl, scheduler):
             ds = dice_score(masks, mask.cpu().numpy())
             dice_scores+= ds
             test_loss += loss
-            test_loss = test_loss/len(valid_dl)
-            test_dice= dice_scores/len(valid_dl)
+        test_loss = test_loss/len(valid_dl)
+        test_dice= dice_scores/len(valid_dl)
 
         if args.is_master:
             print(f" Loss : {test_loss}")
