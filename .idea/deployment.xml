@@ -1,7 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="Always" remoteFilesAllowedToDisappearOnAutoupload="false" confirmBeforeUploading="false">
-    <option name="confirmBeforeUploading" value="false" />
-    <option name="myAutoUpload" value="ALWAYS" />
+  <component name="PublishConfigData" remoteFilesAllowedToDisappearOnAutoupload="false">
+    <serverData>
+      <paths name="dhdock1">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/private/Dacon_seg" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="dhdock2">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/private/Dacon_seg" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="dhdock3">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/private/Dacon_seg" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="dhdock4">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/private/Dacon_seg" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+    </serverData>
   </component>
 </project>
