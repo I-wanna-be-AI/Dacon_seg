@@ -21,12 +21,11 @@ def get_model(args):
         model = smp.Unet(encoder_name="resnext101_32x8d", encoder_weights="imagenet", in_channels=3,   classes=1)
     elif args.model == "effnet3":
         model = smp.Unet(encoder_name="timm-efficientnet-b3", encoder_weights="imagenet", in_channels=3,   classes=1)
-
     elif args.model == "unetplus_res34":
         model = smp.UnetPlusPlus(encoder_name="resnet34", encoder_weights="imagenet", in_channels=3,   classes=1)
     
     model = torch.nn.SyncBatchNorm.convert_sync_batchnorm(model)
     model.cuda(args.local_rank)
-    model = DistributedDataParallel(model, static_graph=False, device_ids=[args.local_rank])
+    model = DistributedDataParallel(model, static_graph=False, device_ids=[args.local_rank],find_unused_parameters=True)
     
     return model

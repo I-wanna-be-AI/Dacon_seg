@@ -45,7 +45,7 @@ def seed_everything(seed ):
     torch.backends.cudnn.enabled = False
 
 def save_model(args, model):
-    torch.save(model.state_dict(), os.path.join(args.chkpt_path, args.model + args.save_name + "_model_768.pt"))
+    torch.save(model.state_dict(), os.path.join(args.chkpt_path, args.model + args.save_name + "_model.pt"))
     torch.save(model.module.state_dict(), os.path.join(args.chkpt_path, args.model + "_model_768(X).pt"))
 
 def get_metric(y_true, y_pred):
