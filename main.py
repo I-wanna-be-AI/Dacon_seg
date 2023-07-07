@@ -1,6 +1,7 @@
 import warnings
 
 from torch import device
+from torch.utils.data import DistributedSampler
 from tqdm import tqdm
 
 from utils import *
@@ -30,8 +31,10 @@ if __name__ == "__main__":
         train_dataset, val_dataset = torch.utils.data.random_split(dataset, [train_size, val_size])
         train_dataset.dataset.transform, val_dataset.dataset.transform = train_transform, valid_transform
 
-        train_loader = DataLoader(train_dataset, batch_size=16, shuffle=True, num_workers=4)
-        val_loader = DataLoader(val_dataset, batch_size=16, shuffle=False, num_workers=4)
+        train_sampler = DistributedSampler(train_dataset, shuffle=True)
+        val_sampler = DistributedSampler(val_dataset, shuffle=False)
+        train_loader = DataLoader(train_dataset, batch_size=args.batchsize, shuffle=False, num_workers=4, sampler=train_sampler)
+        val_loader = DataLoader(val_dataset, batch_size=args.batchsize, shuffle=False, num_workers=4, sampler=val_sampler)
         #train_dl, valid_dl, train_sampler = get_dataloader(args)
         scheduler = get_scheduler(args, optimizer, train_loader)
         do_train(args, modeled, optimizer, criterion, train_loader, val_loader, scheduler)
@@ -64,5 +67,5 @@ if __name__ == "__main__":
 
         submit = pd.read_csv('./data/sample_submission.csv')
         submit['mask_rle'] = result
-        submit.to_csv('./submit/submit.csv', index=False)
+        submit.to_csv('./submit/submit_0707.csv', index=False)
 

@@ -29,7 +29,7 @@ def inference(args, model, test_dl, submit_df):
         pred_df = pd.DataFrame({'ImageId':filenames, 'answer': preds})
         result = submit_df.merge(pred_df, on='ImageId', how='left')
         result.drop('answer_x', axis=1, inplace=True)
-        result.rename(columns={'answer_y':'answer'}, inplace=True)
+        result.rename(columns={'answer_y':'answer'}, inplace=True)`
         result.to_csv(os.path.join(args.submit_path,'unet_baseunet_base_model_768.csv'), index=False)
         # submit_df.to_csv(os.path.join(args.submit_path,'effb0_224.csv'), index=False)
         print("success")

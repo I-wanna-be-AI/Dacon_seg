@@ -17,18 +17,20 @@ def do_train(args, model, optimizer, criterion, train_dl, valid_dl, scheduler):
     scaler = torch.cuda.amp.GradScaler(enabled = True)
     for epoch in range(args.epochs):
 
+        train_dl.sampler.set_epoch(epoch)
+
         if args.is_master:
             print(f"Epoch :  {epoch + 1}")
 
         model.train()
-        for img, mask in train_dl:
+
+        for img, mask in tqdm(train_dl):
             img, mask = img.to(args.device, dtype=torch.float), mask.to(args.device, dtype=torch.float)
             optimizer.zero_grad()
-            epoch_loss =0
+            epoch_loss = 0
             with torch.cuda.amp.autocast(enabled = True):    
-                outputs= model(img)
+                outputs = model(img)
                 loss = criterion(outputs, mask.unsqueeze(1))
-
 
             scaler.scale(loss).backward()
             scaler.step(optimizer)

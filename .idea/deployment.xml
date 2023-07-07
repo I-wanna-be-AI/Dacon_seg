@@ -31,6 +31,20 @@
           </mappings>
         </serverdata>
       </paths>
+      <paths name="docker_3">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/junseo/private/Dacon_seg" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="docker_3_interpreter">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/junseo/private" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
       <paths name="docker_4">
         <serverdata>
           <mappings>
