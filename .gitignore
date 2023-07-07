@@ -7,3 +7,5 @@ data
 baseline
 wandb
 submit
+.idea/
+*.idea

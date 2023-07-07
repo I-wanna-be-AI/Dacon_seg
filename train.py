@@ -10,7 +10,7 @@ def do_train(args, model, optimizer, criterion, train_dl, valid_dl, scheduler):
 
     print()
     if args.is_master:
-        wandb.init(name = f"{args.model}", project = "Dacon_Segmentation", reinit = True, entity = "dk58319", config = args)
+        wandb.init(name = f"{args.model}", project = "Dacon_Segmentation", reinit = True, entity = "ljs990310", config = args)
         print("Stat Train and Valid")
 
     best_loss = 1
