@@ -10,3 +10,15 @@ submit
 .idea/
 *.idea
 .idea
+.idea/deployment.xml
+.idea/workspace.xml
+.idea/inspectionProfiles
+.idea/assetWizardSettings.xml
+.idea/dictionaries
+.idea/libraries
+.idea/modules.xml
+.idea/scopes
+.idea/vcs.xml
+.idea/watcherTasks.xml
+.idea/gradle.xml
+.idea/misc.xml
