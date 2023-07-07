@@ -60,7 +60,7 @@ def do_train(args, model, optimizer, criterion, train_dl, valid_dl, scheduler):
         test_dice= dice_scores/len(valid_dl)
 
         if args.is_master:
-            print(f" Loss : {test_loss}")
+            print(f" Loss : {test_loss}, Dice : {test_dice}")
             if args.save_model and best_loss > test_loss:
                 best_loss = test_loss
                 print("save", test_loss)
