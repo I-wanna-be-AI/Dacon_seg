@@ -16,14 +16,22 @@ def init_cuda_distributed(args):
     os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu_ids
     os.environ['CUDA_LAUNCH_BLOCKING'] = "1"
 
-    torch.distributed.init_process_group( backend='nccl', init_method='env://')
-    args.local_rank = torch.distributed.get_rank()
-    args.world_size = torch.distributed.get_world_size() 
+    if 'RANK' in os.environ and 'WORLD_SIZE' in os.environ:
+        torch.distributed.init_process_group( backend='nccl', init_method='env://')
+        args.local_rank = torch.distributed.get_rank()
+        args.world_size = torch.distributed.get_world_size()
+        args.is_master = args.local_rank == 0
+        args.device = torch.device(f'cuda:{args.local_rank}') if torch.cuda.is_available() else torch.device('cpu')
+        torch.cuda.set_device(args.local_rank)  # 표기
+        seed_everything(args.seed + args.local_rank)
+    else:
+        args.distributed = False
+        args.world_size = 1
+        args.gpu = 0
+        args.is_master = True
+        args.device = torch.device(f'cuda:{0}') if torch.cuda.is_available() else torch.device('cpu')
+        seed_everything(args.seed + args.local_rank)
 
-    args.is_master = args.local_rank == 0    
-    args.device = torch.device(f'cuda:{args.local_rank}') if torch.cuda.is_available() else torch.device('cpu')
-    torch.cuda.set_device(args.local_rank) # 표기
-    seed_everything(args.seed + args.local_rank)
 
 # Set Seed
 def seed_everything(seed ):              

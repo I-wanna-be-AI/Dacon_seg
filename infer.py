@@ -8,7 +8,7 @@ from dataset.rle import rle_encode
 
 
 def inference(args, model, test_dataloader):
-    model.load_state_dict(torch.load("./chkpt/unet_resnet34_model_768.pt", map_location=args.device))
+    model.load_state_dict(torch.load("./chkpt/unetplus_res34_model_768.pt", map_location=args.device))
 
     if args.is_master:
         print("model Evaluate")
@@ -28,7 +28,7 @@ def inference(args, model, test_dataloader):
                 mask_rle = rle_encode(masks[i])
                 if mask_rle == '':  # 예측된 건물 픽셀이 아예 없는 경우 -1
                     result.append(-1)
-                    print("-1")
+                    #print("-1")
                 else:
                     result.append(mask_rle)
                     #print(mask_rle)
