@@ -8,7 +8,7 @@ from dataset.rle import rle_encode
 
 
 def inference(args, model, test_dataloader):
-    model.load_state_dict(torch.load("./chkpt/effnet3_model_768.pt", map_location=args.device))
+    model.load_state_dict(torch.load("./chkpt/unet_resnet34_model_768.pt", map_location=args.device))
 
     if args.is_master:
         print("model Evaluate")
@@ -22,7 +22,7 @@ def inference(args, model, test_dataloader):
             outputs = model(images)
             masks = torch.sigmoid(outputs).cpu().numpy()
             masks = np.squeeze(masks, axis=1)
-            masks = (masks > 0.5).astype(np.uint8)  # Threshold = 0.35
+            masks = (masks > 0.35).astype(np.uint8)  # Threshold = 0.35
 
             for i in range(len(images)):
                 mask_rle = rle_encode(masks[i])

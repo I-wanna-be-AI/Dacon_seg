@@ -27,7 +27,7 @@ if __name__ == "__main__":
         dataset = SatelliteDataset(csv_file='./data/train.csv', transform=train_transform)
         train_size = int(0.8 * len(dataset))
         val_size = len(dataset) - train_size
-        train_dataset, val_dataset = torch.utils.data.random_split(dataset, [train_size, val_size])
+        train_dataset, val_dataset = torch.utils.data.random_split(dataset, [train_size, val_size], generator=torch.Generator().manual_seed(42))
 
         train_loader = DataLoader(train_dataset, batch_size=args.batchsize, shuffle=True, num_workers=4)
         val_loader = DataLoader(val_dataset, batch_size=args.batchsize, shuffle=False, num_workers=4)

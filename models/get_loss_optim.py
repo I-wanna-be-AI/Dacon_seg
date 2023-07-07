@@ -5,7 +5,7 @@ import torch.nn.functional as F
 def get_optimizer(args, model):
 
     criterion = nn.BCEWithLogitsLoss()
-    optimizer = optim.AdamW(model.parameters(), lr= args.lr)
+    optimizer = optim.Adam(model.parameters(), lr= args.lr)
 
     return optimizer, criterion
 

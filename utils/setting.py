@@ -42,7 +42,6 @@ def save_model(args, model):
 
 def get_metric(y_true, y_pred):
     acc = accuracy_score(y_true, y_pred)
-
     return acc
 
 def dice_score(prediction: np.array, ground_truth: np.array, smooth=1e-7) -> float:
