@@ -3,5 +3,5 @@ torchrun --nproc_per_node=2 main.py --wandb_id dk58319 --gpu_ids 8,9 --train 1 -
 
 
 # Inference
-torchrun --nproc_per_node=2 main.py --wandb_id dk58319 --gpu_ids 8,9 --infer 1 --model effnet3 --batchsize 128
+torchrun --nproc_per_node=2 main.py --wandb_id dk58319 --gpu_ids 8,9 --infer 1 --model unet_resnet101 --batchsize 128
 

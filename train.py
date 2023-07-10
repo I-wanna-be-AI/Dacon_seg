@@ -36,8 +36,7 @@ def do_train(args, model, optimizer, criterion, train_dl, valid_dl, scheduler):
             torch.cuda.synchronize()
             scheduler.step()
 
-        true_label = []
-        preds = []
+
         test_loss, threshold = 0, 0.35
         print(f"Validation step, epoch: {epoch + 1}")
         model.eval()

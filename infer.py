@@ -1,4 +1,6 @@
 import os
+
+import cv2
 import torch
 import numpy as np
 import pandas as pd
@@ -8,7 +10,7 @@ from dataset.rle import rle_encode
 
 
 def inference(args, model, test_dataloader):
-    model.load_state_dict(torch.load("./chkpt/unetplus_res34_model_768.pt", map_location=args.device))
+    model.load_state_dict(torch.load("./chkpt/unet_mlt_b4_model.pt", map_location=args.device))
 
     if args.is_master:
         print("model Evaluate")
@@ -23,6 +25,8 @@ def inference(args, model, test_dataloader):
             masks = torch.sigmoid(outputs).cpu().numpy()
             masks = np.squeeze(masks, axis=1)
             masks = (masks > 0.35).astype(np.uint8)  # Threshold = 0.35
+            # #resize mask to original size
+            # masks = np.array([cv2.resize(mask, (224, 224)) for mask in masks])
 
             for i in range(len(images)):
                 mask_rle = rle_encode(masks[i])
@@ -35,5 +39,5 @@ def inference(args, model, test_dataloader):
 
     submit = pd.read_csv('./data/sample_submission.csv')
     submit['mask_rle'] = result
-    submit.to_csv('./submit/submit.csv', index=False)
+    submit.to_csv('./submit/submit_unet_mlt_th0.4.csv', index=False)
     print("success")
