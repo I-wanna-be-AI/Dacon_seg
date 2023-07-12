@@ -16,7 +16,7 @@ def get_aug(args):
         ToTensorV2()
     ])
     val_aug = A.Compose([
-        A.Resize(width=args.img_size, height=args.img_size),
+        A.Resize(width=args.img_size, height=args.img_size, interpolation=1),
         A.Normalize(),
         ToTensorV2()
     ])
