@@ -11,7 +11,7 @@ from dataset.rle import rle_encode
 
 
 def inference(args, model, test_dataloader):
-    model.load_state_dict(torch.load("./chkpt/unet_mlt_b4bugfix_model.pt", map_location=args.device))
+    model.load_state_dict(torch.load("./chkpt/DeepLabV3_resnet341_model.pt", map_location=args.device))
 
     if args.is_master:
         print("model Evaluate")
@@ -53,5 +53,5 @@ def inference(args, model, test_dataloader):
 
     submit = pd.read_csv('./data/sample_submission.csv')
     submit['mask_rle'] = result
-    submit.to_csv('./submit/submit_bugfix.csv', index=False)
+    submit.to_csv(f'./submit/{args.model}.csv', index=False)
     print("success")

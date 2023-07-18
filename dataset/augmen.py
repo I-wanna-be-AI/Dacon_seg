@@ -6,7 +6,6 @@ def get_aug(args):
 
     train_aug = A.Compose([
         #A.Resize(width=args.img_size, height=args.img_size),
-
         A.RandomCrop(args.img_size, args.img_size),
         A.Normalize(),
         A.HorizontalFlip(p=0.5),

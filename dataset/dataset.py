@@ -13,7 +13,8 @@ from .rle import rle_decode
 class SatelliteDataset(Dataset):
     def __init__(self, csv_file, transform=None, infer=False):
         self.data = pd.read_csv(csv_file)
-        self.data = pd.concat([self.data,self.data,self.data],axis=0,ignore_index=True)
+        if infer == False:
+            self.data = pd.concat([self.data,self.data,self.data],axis=0,ignore_index=True)
         self.transform = transform
         self.infer = infer
 
