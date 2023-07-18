@@ -58,7 +58,6 @@ def do_train(args, model, optimizer, criterion, train_dl, valid_dl, scheduler):
                 outputs = model(img)
                 masks = torch.sigmoid(outputs).squeeze(1)
                 masks = (masks>0.35).float()
-
                 # masks = torch.sigmoid(outputs).cpu().numpy()
                 # masks = np.squeeze(masks, axis=1)
                 # masks = (masks>0.35).astype(np.uint8)

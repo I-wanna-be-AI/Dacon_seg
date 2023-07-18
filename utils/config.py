@@ -3,7 +3,7 @@ import argparse
 def get_argparser():                    
     parser = argparse.ArgumentParser("Competition Version", add_help=False)
     parser.add_argument("--seed", type = int, required = False, default = 0)
-    parser.add_argument("--gpu_ids", type = str)
+    parser.add_argument("--gpu_ids", type = str,default = "8,9")
     parser.add_argument("--img_size", type = int, default = 224, required = False)
     parser.add_argument("--wandb_id", type = str, default = "dk58319", required = False)
     # parser.add_argument("--world_size", type = int, default=1)
