@@ -42,7 +42,7 @@ if __name__ == "__main__":
 
 
     if args.infer:
-        #test_dl, test_df = get_testloader(args)
+
         _,_,transform = get_aug(args)
         test_dataset = SatelliteDataset(csv_file='./data/test.csv', transform=transform, infer=True)
         test_loader = DataLoader(test_dataset, batch_size=args.batchsize, shuffle=False, num_workers=4)
