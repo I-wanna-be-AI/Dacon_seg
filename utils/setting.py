@@ -18,6 +18,7 @@ def init_cuda_distributed(args):
 
     if 'RANK' in os.environ and 'WORLD_SIZE' in os.environ:
         torch.distributed.init_process_group( backend='nccl', init_method='env://')
+        args.distributed = True
         args.local_rank = torch.distributed.get_rank()
         args.world_size = torch.distributed.get_world_size()
         args.is_master = args.local_rank == 0
@@ -27,6 +28,7 @@ def init_cuda_distributed(args):
     else:
         args.distributed = False
         args.world_size = 1
+        args.local_rank= 0
         args.gpu = 0
         args.is_master = True
         args.device = torch.device(f'cuda:{0}') if torch.cuda.is_available() else torch.device('cpu')
@@ -58,6 +60,13 @@ def dice_score(prediction: np.array, ground_truth: np.array, smooth=1e-7) -> flo
     '''
     intersection = np.sum(prediction * ground_truth)
     return (2.0 * intersection + smooth) / (np.sum(prediction) + np.sum(ground_truth) + smooth)
+
+def dice_score_torch(prediction, ground_truth, smooth=1e-7):
+    '''
+    Calculate Dice Score between two binary masks.
+    '''
+    intersection = torch.sum(prediction * ground_truth)
+    return (2.0 * intersection + smooth) / (torch.sum(prediction) + torch.sum(ground_truth) + smooth)
 
 
 def calculate_dice_scores(ground_truth_df, prediction_df, img_shape=(224, 224)) -> List[float]:

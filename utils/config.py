@@ -5,8 +5,9 @@ def get_argparser():
     parser.add_argument("--seed", type = int, required = False, default = 0)
     parser.add_argument("--gpu_ids", type = str)
     parser.add_argument("--img_size", type = int, default = 224, required = False)
-    parser.add_argument("--wandb_id", type = str, default = "dk58319", required = True)
-    
+    parser.add_argument("--wandb_id", type = str, default = "dk58319", required = False)
+    # parser.add_argument("--world_size", type = int, default=1)
+
     # train or infer
     parser.add_argument("--train", type = int, required = False, default = 0)
     parser.add_argument("--split", type = float, required = False, default = 0.15)
