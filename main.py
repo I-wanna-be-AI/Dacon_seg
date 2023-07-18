@@ -24,8 +24,9 @@ if __name__ == "__main__":
     optimizer, criterion = get_optimizer(args, modeled)
 
     if args.train:
-        train_transform, valid_transform = get_aug(args)
+        train_transform, valid_transform, _ = get_aug(args)
         dataset = SatelliteDataset(csv_file='./data/train.csv')
+        print(len(dataset))
         train_size = int(0.8 * len(dataset))
         val_size = len(dataset) - train_size
         train_dataset, val_dataset = torch.utils.data.random_split(dataset, [train_size, val_size], generator=torch.Generator().manual_seed(args.seed))
@@ -42,7 +43,7 @@ if __name__ == "__main__":
 
     if args.infer:
         #test_dl, test_df = get_testloader(args)
-        _,transform = get_aug(args)
+        _,_,transform = get_aug(args)
         test_dataset = SatelliteDataset(csv_file='./data/test.csv', transform=transform, infer=True)
         test_loader = DataLoader(test_dataset, batch_size=args.batchsize, shuffle=False, num_workers=4)
         inference(args, modeled, test_loader)
