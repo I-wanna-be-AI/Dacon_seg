@@ -46,4 +46,3 @@ if __name__ == "__main__":
         test_dataset = SatelliteDataset(csv_file='./data/test.csv', transform=transform, infer=True)
         test_loader = DataLoader(test_dataset, batch_size=args.batchsize, shuffle=False, num_workers=4)
         inference(args, modeled, test_loader)
-

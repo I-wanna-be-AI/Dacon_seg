@@ -32,6 +32,6 @@ def get_model(args):
     
     model = torch.nn.SyncBatchNorm.convert_sync_batchnorm(model)
     model.cuda(args.local_rank)
-    model = DistributedDataParallel(model, static_graph=False, device_ids=[args.local_rank],find_unused_parameters=True)
+    model = DistributedDataParallel(model, static_graph=False, device_ids=[args.local_rank])
     
     return model
