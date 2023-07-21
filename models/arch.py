@@ -20,7 +20,7 @@ def get_model(args):
     elif args.model == "unet_resnext101":
         model = smp.Unet(encoder_name="resnext101_32x8d", encoder_weights="imagenet", in_channels=3,   classes=1)
     elif args.model == "effnet3":
-        model = smp.Unet(encoder_name="timm-efficientnet-b3", encoder_weights="imagenet", in_channels=3,   classes=1)
+        model = smp.UnetPlusPlus(encoder_name="timm-efficientnet-b3", encoder_weights="imagenet", in_channels=3,   classes=1)
     elif args.model == "unetplus_res34":
         model = smp.UnetPlusPlus(encoder_name="resnet34", encoder_weights="imagenet", in_channels=3,   classes=1)
     elif args.model == "unetplus_resnext101":
@@ -29,6 +29,8 @@ def get_model(args):
         model = smp.DeepLabV3(encoder_name="resnet34", encoder_weights="imagenet", in_channels=3, classes=1)
     elif args.model == "unet_mlt_b4":
         model = smp.Unet(encoder_name="mit_b4", encoder_weights="imagenet", in_channels=3,   classes=1)
+    elif args.model == "unetplus_inception":
+        model = smp.UnetPlusPlus(encoder_name="inceptionresnetv2", encoder_weights="imagenet", in_channels=3, classes=1)
     
     model = torch.nn.SyncBatchNorm.convert_sync_batchnorm(model)
     model.cuda(args.local_rank)

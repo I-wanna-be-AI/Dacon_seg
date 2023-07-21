@@ -15,8 +15,7 @@ def reduce_tensor(tensor, n):
 
 def do_train(args, model, optimizer, criterion, train_dl, valid_dl, scheduler):
 
-    print()
-    if args.is_master:
+    if args.is_master :
         wandb.init(name = f"{args.model}", project = "Dacon_Segmentation", reinit = True, entity = args.wandb_id, config = args)
         print("Stat Train and Valid")
 
