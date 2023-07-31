@@ -11,7 +11,7 @@ from dataset.rle import rle_encode
 
 
 def inference(args, model, test_dataloader):
-    model.load_state_dict(torch.load("./chkpt/DeepLabV3_resnet341_model.pt", map_location=args.device))
+    model.load_state_dict(torch.load("./chkpt/unetplus_inception_model.pt", map_location=args.device))
 
     if args.is_master:
         print("model Evaluate")
@@ -26,21 +26,20 @@ def inference(args, model, test_dataloader):
             masks = torch.sigmoid(outputs).cpu().numpy()
             masks = np.squeeze(masks, axis=1)
             masks = (masks > 0.35).astype(np.uint8)  # Threshold = 0.35
+            # resize mask to original size
+            masks = np.array([cv2.resize(mask, (224, 224)) for mask in masks])
             # #save  one sample output image and mask for check
-            # for i in range(60, 70):
+            # for i in range(40, 70):
             #     img = images[i].cpu().numpy()
             #     img = img.astype(np.uint8)
             #     print(img.shape)
             #     img = np.transpose(img, (1, 2, 0))
             #     mask = masks[i]
-            #     plt.imshow(img)
-            #     plt.savefig(f"./debug/img{i}.png")
+            #     print(mask.shape)
+            #     plt.imshow(mask)
+            #     plt.savefig(f"./debug/th08{i}.png")
             #
             # break
-
-
-            # #resize mask to original size
-            #masks = np.array([cv2.resize(mask, (224, 224)) for mask in masks])
 
             for i in range(len(images)):
                 mask_rle = rle_encode(masks[i])
@@ -53,5 +52,5 @@ def inference(args, model, test_dataloader):
 
     submit = pd.read_csv('./data/sample_submission.csv')
     submit['mask_rle'] = result
-    submit.to_csv(f'./submit/{args.model}.csv', index=False)
+    submit.to_csv(f'./submit/{args.model}_bigimg_256.csv', index=False)
     print("success")
